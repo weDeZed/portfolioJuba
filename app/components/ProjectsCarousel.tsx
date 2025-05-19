@@ -23,7 +23,7 @@ Implémentation de JWT pour la gestion des accès sécurisés, intégration API 
     technologies: ['Node.js', 'Express', 'JWT', 'MongoDB', 'PDFKit'],
   },
   {
-    title: 'Application des gestion de stages',
+    title: 'Application des gestion des stages',
     description: 'Développement et déploiement d’une application web de gestion des stages.',
     details: `Développée en équipe avec Spring Boot et Angular, eStage centralise le suivi des stages étudiants.
 Ajout de fonctionnalités comme l’envoi automatique d’e-mails, la gestion des documents, et un tableau de bord individualisé pour plus de 80 utilisateurs.`,
