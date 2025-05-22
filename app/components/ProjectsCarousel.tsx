@@ -21,7 +21,7 @@ Ajout de fonctionnalités comme l’envoi automatique d’e-mails, la gestion de
   },
   {
     title: 'Interfaces front pour VIF SOFTWARE',
-    images: ['/images/vif1.png', '/images/vif2.png', '/images/vif3.png'],
+    images: ['/images/vif.png', '/images/vif.png', '/images/vif.png'],
     technologies: ['Vue.js', 'Vuetify', 'JavaScript', 'REST API'],
     description: `Ajout de fonctionnalités, amélioration de modules existants, débogage front-end, et refonte de vues en lien avec l’équipe produit.
 Intégration d’outils d’analyse IA et conception de modules réactifs adaptés aux besoins métiers.`,
