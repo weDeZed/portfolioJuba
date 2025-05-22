@@ -13,22 +13,15 @@ const projects = [
   Back-end en Python Flask pour gérer les APIs et les traitements de données, et front-end en Angular pour une interface moderne et réactive.`,
   },
   {
-    title: 'Générateur PDF sécurisé',
-    images: ['/images/lion.jpg', '/images/lion.jpg', '/images/lion.jpg'],
-    technologies: ['Node.js', 'Express', 'JWT', 'MongoDB', 'PDFKit'],
-    description: `Création d’une fonctionnalité back-end pour une entreprise industrielle : génération automatique de rapports PDF à partir des données temps réel.
-Implémentation de JWT pour la gestion des accès sécurisés, intégration API avec authentification et logique conditionnelle.`,
-  },
-  {
     title: 'Application des gestion des stages',
-    images: ['/images/lion.jpg', '/images/lion.jpg', '/images/lion.jpg'],
+    images: ['/images/eStage1.png', '/images/eStage2.png', '/images/eStage3.png'],
     technologies: ['Spring Boot', 'Angular', 'PostgreSQL', 'Agile', 'Java'],
     description: `Développée en équipe avec Spring Boot et Angular, l'application eStage centralise le suivi des stages étudiants.
 Ajout de fonctionnalités comme l’envoi automatique d’e-mails, la gestion des documents, et un tableau de bord individualisé pour plus de 80 utilisateurs.`,
   },
   {
     title: 'Interfaces front pour VIF SOFTWARE',
-    images: ['/images/lion.jpg', '/images/lion.jpg', '/images/lion.jpg'],
+    images: ['/images/vif1.png', '/images/vif2.png', '/images/vif3.png'],
     technologies: ['Vue.js', 'Vuetify', 'JavaScript', 'REST API'],
     description: `Ajout de fonctionnalités, amélioration de modules existants, débogage front-end, et refonte de vues en lien avec l’équipe produit.
 Intégration d’outils d’analyse IA et conception de modules réactifs adaptés aux besoins métiers.`,
@@ -64,11 +57,11 @@ export default function ProjectsCarousel() {
                   key={i}
                   className="flex-1 overflow-hidden rounded-lg shadow-lg max-w-sm mx-auto"
                 >
-                  <img
-                    src={src}
-                    alt={`Aperçu ${i + 1} - ${project.title}`}
-                    className="w-full h-64 object-cover"
-                  />
+              <img
+                src={src}
+                alt={`Aperçu ${i + 1} - ${project.title}`}
+                className="w-full h-48 object-contain bg-white rounded-md p-1"
+              />
                 </div>
               ))}
             </div>
