@@ -2,7 +2,7 @@
 
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 const projects = [
   {
@@ -35,33 +35,32 @@ Intégration d’outils d’analyse IA et conception de modules réactifs adapt�
   Installation et configuration de serveurs Prestashop, optimisation des performances d'import, et automatisation de flux de données.`,
   },
 ]
-
 export default function ProjectsCarousel() {
   const autoplay = useRef(Autoplay({ delay: 8000 }))
   const [emblaRef, embla] = useEmblaCarousel({ loop: true }, [autoplay.current])
-
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   return (
     <div className="relative overflow-hidden" ref={emblaRef}>
       <div className="flex">
         {projects.map((project, index) => (
           <div className="min-w-full px-6 py-12" key={index}>
-            {/* Titre */}
             <h2 className="text-3xl sm:text-4xl font-bold text-[#BFA181] mb-6 text-center">
               {project.title}
             </h2>
 
-            {/* Images */}
+            {/* Images en cartes */}
             <div className="flex flex-col sm:flex-row justify-center gap-6 mb-8">
               {project.images.map((src, i) => (
                 <div
                   key={i}
-                  className="flex-1 overflow-hidden rounded-lg shadow-lg max-w-sm mx-auto"
+                  className="flex-1 overflow-hidden rounded-lg shadow-lg max-w-sm mx-auto cursor-pointer"
+                  onClick={() => setSelectedImage(src)}
                 >
-              <img
-                src={src}
-                alt={`Aperçu ${i + 1} - ${project.title}`}
-                className="w-full h-48 object-contain bg-white rounded-md p-1"
-              />
+                  <img
+                    src={src}
+                    alt={`Aperçu ${i + 1} - ${project.title}`}
+                    className="w-full h-56 object-contain bg-white rounded-md p-2"
+                  />
                 </div>
               ))}
             </div>
@@ -86,23 +85,42 @@ export default function ProjectsCarousel() {
         ))}
       </div>
 
-      {/* Flèches de navigation */}
+      {/* Navigation */}
       <div className="absolute top-1/2 left-0 right-0 z-20 flex justify-between px-4 transform -translate-y-1/2">
         <button
           onClick={() => embla && embla.scrollPrev()}
           className="text-white text-3xl font-bold hover:text-[#178582] transition"
-          aria-label="Projet précédent"
         >
           ‹
         </button>
         <button
           onClick={() => embla && embla.scrollNext()}
           className="text-white text-3xl font-bold hover:text-[#178582] transition"
-          aria-label="Projet suivant"
         >
           ›
         </button>
       </div>
+
+      {/* Lightbox modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img
+            src={selectedImage}
+            alt="Image projet agrandie"
+            className="max-w-3xl w-full max-h-[90vh] rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()} // empêche la fermeture si on clique sur l'image
+          />
+          <button
+            className="absolute top-4 right-6 text-white text-3xl hover:text-[#BFA181] transition"
+            onClick={() => setSelectedImage(null)}
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   )
 }
