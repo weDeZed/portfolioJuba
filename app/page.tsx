@@ -13,8 +13,8 @@ export default function HomePage() {
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.5 }}
 >
-À la recherche d’une <strong className="text-[#BFA181]">alternance en développement</strong>{' '}
-  <strong className="text-[#178582]">front-end, back-end ou full-stack</strong> à partir de{' '}
+À la recherche d’une <strong className="text-[#BFA181]">alternance</strong>{' '}
+  <strong className="text-[#178582]"></strong> à partir de{' '}
   <strong className="text-[#BFA181]">septembre 2025</strong>, avec un rythme de{' '}
   <strong className="text-[#BFA181]">1 semaine en cours / 2 semaines en entreprise</strong>.
 </motion.p>
