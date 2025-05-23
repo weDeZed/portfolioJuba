@@ -12,7 +12,7 @@ export default function AboutPage() {
       {/* Paragraphes justifiés */}
       <p className="text-base sm:text-lg mb-6 leading-relaxed text-white/90 text-justify">
         Je suis <strong>Juba Chabane</strong>, développeur full-stack, actuellement à la recherche
-        d’une opportunité pour 2025–2026. Curieux, autonome et passionné, je combine des compétences
+        d’une alternance pour la rentrée 2025–2026. Curieux, autonome et passionné, je combine des compétences
         solides en front-end et back-end avec une réelle sensibilité à l’expérience utilisateur.
       </p>
 
