@@ -10,6 +10,7 @@ export default function Navbar() {
             <a href="/projects" className="hover:text-[#178582] transition-colors">Projets</a>
             <a href="/contact" className="hover:text-[#178582] transition-colors">Contact</a>
             <a href="/cv" className="hover:text-[#178582] transition-colors">CV</a>
+            <a href="/satya" className="hover:text-[#178582] transition-colors">Satya</a>
           </div>
         </nav>
       </header>
