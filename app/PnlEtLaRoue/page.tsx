@@ -2,13 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-type MtgSet = {
-	id: string;
-	name: string;
-	set_type: string;
-	icon_svg_uri?: string;
-};
-
 type MtgColor = {
 	id: string;
 	name: string;
@@ -20,13 +13,6 @@ type CommanderSet = {
 	name: string;
 	codes: string;
 };
-
-const allowedTypes = new Set([
-	"core",
-	"expansion",
-	"masters",
-	"draft_innovation",
-]);
 
 const mtgColors: MtgColor[] = [
 	{
@@ -92,6 +78,9 @@ const commanderSets: CommanderSet[] = [
 	{ name: "Commander 2014", codes: "C14" },
 	{ name: "Commander 2013", codes: "C13" },
 	{ name: "Commander 2011", codes: "CMD" },
+];
+
+const historicSets: CommanderSet[] = [
 	{ name: "Limited Edition Alpha", codes: "LEA" },
 	{ name: "Limited Edition Beta", codes: "LEB" },
 	{ name: "Unlimited Edition", codes: "2ED" },
@@ -199,7 +188,7 @@ const commanderSets: CommanderSet[] = [
 	{ name: "Core Set 2021", codes: "M21" },
 	{ name: "Modern Horizons", codes: "MH1" },
 	{ name: "Modern Horizons 2", codes: "MH2" },
-	{ name: "Modern Horizons 3 (set)", codes: "MH3" },
+	{ name: "Modern Horizons 3", codes: "MH3" },
 	{ name: "Double Masters", codes: "2XM" },
 	{ name: "Jumpstart", codes: "JMP" },
 ];
@@ -209,12 +198,9 @@ const CANVAS_SIZE = 480;
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const PnlEtLaRouePage = () => {
-	const [sets, setSets] = useState<MtgSet[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
 	const [isSpinning, setIsSpinning] = useState<boolean>(false);
 	const [rotation, setRotation] = useState<number>(0); // radians
-	const [selectedSet, setSelectedSet] = useState<MtgSet | null>(null);
+	const [selectedSet, setSelectedSet] = useState<CommanderSet | null>(null);
 
 	const [colorRotation, setColorRotation] = useState<number>(0);
 	const [isColorSpinning, setIsColorSpinning] = useState<boolean>(false);
@@ -233,39 +219,6 @@ const PnlEtLaRouePage = () => {
 	const commanderWheelAnimationRef = useRef<number | null>(null);
 
 	useEffect(() => {
-		const fetchSets = async () => {
-			try {
-				setLoading(true);
-				setError(null);
-
-				const res = await fetch("https://api.scryfall.com/sets");
-				if (!res.ok) {
-					throw new Error("Impossible de récupérer les sets depuis Scryfall.");
-				}
-
-				const json = await res.json();
-				const filtered: MtgSet[] = (json.data || []).filter((s: MtgSet) =>
-					allowedTypes.has(s.set_type)
-				);
-
-				if (!filtered.length) {
-					throw new Error("Aucun set valide trouvé dans la réponse de l'API.");
-				}
-
-				setSets(filtered);
-			} catch (e: unknown) {
-				const message =
-					e instanceof Error
-						? e.message
-						: "Erreur inconnue lors du chargement des sets.";
-				setError(message);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchSets();
-
 		return () => {
 			if (setWheelAnimationRef.current !== null) {
 				cancelAnimationFrame(setWheelAnimationRef.current);
@@ -281,7 +234,7 @@ const PnlEtLaRouePage = () => {
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
-		if (!canvas || !sets.length) return;
+		if (!canvas || !historicSets.length) return;
 
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
@@ -300,13 +253,13 @@ const PnlEtLaRouePage = () => {
 		ctx.save();
 		ctx.translate(centerX, centerY);
 
-		const sliceAngle = (2 * Math.PI) / sets.length;
+		const sliceAngle = (2 * Math.PI) / historicSets.length;
 
-		sets.forEach((set, index) => {
+		historicSets.forEach((entry, index) => {
 			const startAngle = rotation + index * sliceAngle;
 			const endAngle = startAngle + sliceAngle;
 
-			const hue = (index / sets.length) * 360;
+			const hue = (index / historicSets.length) * 360;
 			ctx.beginPath();
 			ctx.moveTo(0, 0);
 			ctx.arc(0, 0, radius, startAngle, endAngle);
@@ -331,7 +284,8 @@ const PnlEtLaRouePage = () => {
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 
-			const label = set.name.length > 24 ? set.name.slice(0, 21) + "…" : set.name;
+			const label =
+				entry.name.length > 24 ? entry.name.slice(0, 21) + "…" : entry.name;
 			ctx.fillText(label, 0, 0);
 			ctx.restore();
 		});
@@ -366,13 +320,13 @@ const PnlEtLaRouePage = () => {
 		ctx.stroke();
 
 		ctx.restore();
-	}, [sets, rotation]);
+	}, [rotation]);
 
 	const handleSpin = () => {
-		if (!sets.length || isSpinning) return;
+		if (!historicSets.length || isSpinning) return;
 
-		const sliceAngle = (2 * Math.PI) / sets.length;
-		const targetIndex = Math.floor(Math.random() * sets.length);
+		const sliceAngle = (2 * Math.PI) / historicSets.length;
+		const targetIndex = Math.floor(Math.random() * historicSets.length);
 		const turns = 4 + Math.floor(Math.random() * 3);
 
 		const startRotation = rotation % (2 * Math.PI);
@@ -404,7 +358,7 @@ const PnlEtLaRouePage = () => {
 			} else {
 				setIsSpinning(false);
 				setRotation(finalRotation % (2 * Math.PI));
-				setSelectedSet(sets[targetIndex]);
+				setSelectedSet(historicSets[targetIndex]);
 			}
 		};
 
@@ -852,29 +806,15 @@ const PnlEtLaRouePage = () => {
 							</div>
 						</div>
 
-						<div className="flex flex-col gap-6">
-							<div className="space-y-3">
-								{loading && (
-									<p className="text-sm text-slate-300">
-										Chargement des sets depuis Scryfall…
-									</p>
-								)}
-								{error && (
-									<p className="text-sm text-red-400">
-										Erreur : {error}
-									</p>
-								)}
-								{!loading && !error && (
-									<p className="text-xs text-slate-400">
-										Sources de données : API publique Scryfall · {sets.length} sets éligibles
-									</p>
-								)}
-							</div>
+							<div className="flex flex-col gap-6">
+								<p className="text-xs text-slate-400">
+									Nombre de sets dans la roue : {historicSets.length}
+								</p>
 
-							<button
+								<button
 								type="button"
 								onClick={handleSpin}
-								disabled={loading || !!error || isSpinning || !sets.length}
+									disabled={isSpinning}
 								className="inline-flex items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed text-slate-950 font-semibold px-10 py-4 text-lg shadow-lg shadow-emerald-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:transform-none"
 							>
 								{isSpinning ? "La roue tourne…" : "Tourner la roue"}
@@ -889,27 +829,13 @@ const PnlEtLaRouePage = () => {
 										<h2 className="text-2xl sm:text-3xl font-bold text-slate-50 break-words">
 											{selectedSet.name}
 										</h2>
-										{selectedSet.icon_svg_uri && (
-											<div className="flex items-center gap-3 flex-wrap">
-												<img
-													src={selectedSet.icon_svg_uri}
-													alt={selectedSet.name}
-													className="w-10 h-10 drop-shadow-[0_0_12px_rgba(16,185,129,0.7)] bg-slate-900 rounded-md p-1 border border-slate-700"
-												/>
-												<a
-													href={selectedSet.icon_svg_uri}
-													target="_blank"
-													rel="noreferrer"
-													className="text-xs text-emerald-400 hover:text-emerald-300 underline underline-offset-2 break-all"
-												>
-													Ouvrir l'icône en grand
-												</a>
-											</div>
-										)}
+										<p className="text-sm text-emerald-300 font-mono break-all">
+											Codes : {selectedSet.codes}
+										</p>
 									</div>
 								) : (
 									<p className="text-sm text-slate-400">
-										Lance la roue pour découvrir sur quel set tu vas drafter ou construire ton prochain deck.
+										Fais tourner la roue pour tirer au hasard un set historique parmi les blocs et éditions emblématiques de Magic.
 									</p>
 								)}
 							</div>
