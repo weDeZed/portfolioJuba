@@ -1,41 +1,38 @@
 'use client';
 
 import './globals.css';
-import { usePathname } from 'next/navigation';
+import Navbar from '@/app/components/Navbar';
+import Footer from '@/app/components/Footer';
+import FloatingDock from '@/app/components/FloatingDock';
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const allowedPaths = ['/satya', '/PnlEtLaRoue'];
-  const isMaintenanceMode = !allowedPaths.includes(pathname);
-
   return (
-    <html lang="fr">
-      <body className="bg-[#0A1828] text-white">
-        {isMaintenanceMode ? (
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="flex flex-col items-center justify-center w-full h-full px-6">
-              <img
-                src="/images/juba.jpg"
-                alt="Juba"
-                className="rounded-full w-40 h-40 object-cover border-4 border-[#178582] mb-8 shadow-lg"
-              />
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#BFA181] text-center">
-                Site en travaux
-              </h1>
-              <p className="text-lg md:text-xl text-center max-w-xl mb-6 text-[#BFA181]">
-                Merci de votre visite !<br />
-                J'ai mon alternance, par conséquent le site est désactivé et sera bientôt mis à jour.<br />
-                Revenez plus tard pour découvrir la nouvelle version.
-              </p>
-            </div>
+    <html lang="fr" className={cn("font-sans", geist.variable)}>
+      <body className="bg-gradient-to-b from-[#0A1828] via-[#0F1F2E] to-[#0A1828] text-white overflow-x-hidden">
+        {/* Animated background elements */}
+        <div className="fixed inset-0 -z-20">
+          <div className="absolute top-0 left-0 w-full h-full">
+            <div className="absolute top-20 right-1/4 w-96 h-96 bg-gradient-to-br from-[#178582]/10 to-transparent rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-to-tr from-[#BFA181]/10 to-transparent rounded-full blur-3xl animate-pulse" />
+            <div className="absolute top-1/2 right-0 w-96 h-96 bg-gradient-to-l from-[#178582]/5 to-transparent rounded-full blur-3xl" />
           </div>
-        ) : (
-          children
-        )}
+        </div>
+
+        <Navbar />
+        <main className="min-h-screen pt-20 relative z-10">
+          {children}
+        </main>
+        <FloatingDock />
+        <Footer />
       </body>
     </html>
   );
