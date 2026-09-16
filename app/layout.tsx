@@ -9,7 +9,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const allowedPaths = ['/satya', '/PnlEtLaRoue'];
+  const allowedPaths = ['/satya', '/PnlEtLaRoue', '/azula'];
   const isMaintenanceMode = !allowedPaths.includes(pathname);
 
   return (
